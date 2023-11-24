@@ -22,7 +22,7 @@ export type TUser = {
     hobbies: string[];
     address: TAddress,
     orders: TOrder[];
-    isActive: 'active' | 'blocked';
+    isActive: boolean;
 }
 
 // userId (number): A unique identifier for the user.

@@ -70,12 +70,8 @@ const UserSchema = new Schema<TUser>({
     address: { type: addressSchema, required: true },
     orders: { type: [OrderSchema] },
     isActive: {
-        type: String,
-        enum: {
-            values: ['active', 'blocked'],
-            message: "{VALUE} is not a valid status"
-        },
-        default: 'active'
+        type: Boolean,
+        default: true
     }
 })
 
