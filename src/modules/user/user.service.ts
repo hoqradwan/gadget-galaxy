@@ -7,7 +7,7 @@ export const createUserService = async (userData: TUser) => {
     return result;
 }
 
-export const findSingleUserService = async (id: string) => {
-    const result = await User.findById({ id })
+export const findSingleUserService = async (userId: number) => {
+    const result = await User.find({ userId })
     return result;
 }
