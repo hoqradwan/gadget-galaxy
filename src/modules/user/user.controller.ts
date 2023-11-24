@@ -1,6 +1,6 @@
-import { createUserService, findSingleUserService } from "./user.service";
+import { createUserService, getAllUsersService, getSingleUserService } from "./user.service";
 import { Request, Response } from "express";
-export const createUserController = async (req: Request, res: Response) => {
+export const createUser = async (req: Request, res: Response) => {
     try {
         const user = req.body;
         const result = await createUserService(user);
@@ -20,10 +20,29 @@ export const createUserController = async (req: Request, res: Response) => {
         })
     }
 }
-export const findSingleUserController = async (req: Request, res: Response) => {
+export const getAllUsers = async (req: Request, res: Response) => {
+    try {
+        const result = await getAllUsersService();
+        res.status(200).json({
+            success: true,
+            message: "User fetched successfully",
+            data: result
+        })
+
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            error: {
+                code: 404,
+                descrtiption: "User not found!"
+            }
+        })
+    }
+}
+export const getSingleUser = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        const result = await findSingleUserService(userId);
+        const result = await getSingleUserService(userId);
         res.status(200).json({
             success: true,
             message: "User fetched successfully",
