@@ -1,4 +1,4 @@
-import { createUserService, deleteSingleUserService, getAllUsersService, getSingleUserService, updateSingleUserService } from "./user.service";
+import { addProductToOrderService, createUserService, deleteSingleUserService, getAllOrdersService, getAllUsersService, getSingleUserService, updateSingleUserService } from "./user.service";
 import { Request, Response } from "express";
 export const createUser = async (req: Request, res: Response) => {
     try {
@@ -80,11 +80,46 @@ export const updateSingleUser = async (req: Request, res: Response) => {
 export const deleteSingleUser = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        const result = await deleteSingleUserService(userId);
+        await deleteSingleUserService(userId);
         res.status(200).json({
             success: true,
             message: "User deleted successfully",
             data: null
+        })
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: "User not found",
+            error: error
+        })
+    }
+}
+export const addProductToOrder = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const updatedUserOrder = req.body;
+        await addProductToOrderService(userId, updatedUserOrder);
+        res.status(200).json({
+            success: true,
+            message: "Order created successfully",
+            data: null
+        })
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: "User not found",
+            error: error
+        })
+    }
+}
+export const getAllOrders = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const result = await getAllOrdersService(userId);
+        res.status(200).json({
+            success: true,
+            message: "Order fetched successfully",
+            data: result
         })
     } catch (error) {
         res.status(404).json({

@@ -23,3 +23,11 @@ export const deleteSingleUserService = async (userId: string) => {
     const result = await User.deleteOne({ userId: userId })
     return result;
 }
+export const addProductToOrderService = async (userId: string, updatedUserOrder: TUser) => {
+    const result = await User.updateOne({ userId: userId }, { $set: updatedUserOrder })
+    return result;
+}
+export const getAllOrdersService = async (userId: string) => {
+    const result = await User.find({ userId }).select({ orders: 1, _id: 0 });
+    return result;
+}
