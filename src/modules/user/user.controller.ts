@@ -1,4 +1,4 @@
-import { createUserService, getAllUsersService, getSingleUserService, updateAUserService } from "./user.service";
+import { createUserService, deleteSingleUserService, getAllUsersService, getSingleUserService, updateSingleUserService } from "./user.service";
 import { Request, Response } from "express";
 export const createUser = async (req: Request, res: Response) => {
     try {
@@ -59,24 +59,38 @@ export const getSingleUser = async (req: Request, res: Response) => {
         })
     }
 }
-export const updateAeUser = async (req: Request, res: Response) => {
+export const updateSingleUser = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
         const updateAeUser = req.body;
-        const result = await updateAUserService(userId, updateAeUser);
+        const result = await updateSingleUserService(userId, updateAeUser);
         res.status(200).json({
             success: true,
-            message: "User fetched successfully",
+            message: "User updated successfully",
             data: result
         })
     } catch (error) {
         res.status(404).json({
             success: false,
             message: "User not found",
-            error: {
-                code: 404,
-                description: "User not found!"
-            }
+            error: error
+        })
+    }
+}
+export const deleteSingleUser = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const result = await deleteSingleUserService(userId);
+        res.status(200).json({
+            success: true,
+            message: "User deleted successfully",
+            data: null
+        })
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: "User not found",
+            error: error
         })
     }
 }

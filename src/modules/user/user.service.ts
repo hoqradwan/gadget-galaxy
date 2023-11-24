@@ -15,7 +15,11 @@ export const getSingleUserService = async (userId: string) => {
     const result = await User.find({ userId })
     return result;
 }
-export const updateAUserService = async (userId: string, updatedUser: TUser) => {
-    const result = await User.updateOne({ userId }, { $set: updatedUser })
+export const updateSingleUserService = async (userId: string, updatedUser: TUser) => {
+    const result = await User.updateOne({ userId: userId }, { $set: updatedUser })
+    return result;
+}
+export const deleteSingleUserService = async (userId: string) => {
+    const result = await User.deleteOne({ userId: userId })
     return result;
 }
