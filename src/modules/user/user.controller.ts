@@ -1,4 +1,4 @@
-import { createUserService, getAllUsersService, getSingleUserService } from "./user.service";
+import { createUserService, getAllUsersService, getSingleUserService, updateAUserService } from "./user.service";
 import { Request, Response } from "express";
 export const createUser = async (req: Request, res: Response) => {
     try {
@@ -58,6 +58,25 @@ export const getSingleUser = async (req: Request, res: Response) => {
             }
         })
     }
-
-
+}
+export const updateAeUser = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const updateAeUser = req.body;
+        const result = await updateAUserService(userId, updateAeUser);
+        res.status(200).json({
+            success: true,
+            message: "User fetched successfully",
+            data: result
+        })
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: "User not found",
+            error: {
+                code: 404,
+                description: "User not found!"
+            }
+        })
+    }
 }
