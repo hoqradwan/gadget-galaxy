@@ -6,14 +6,17 @@ const createUserController = async (req: Request, res: Response) => {
         const result = await createUserService(user);
         res.status(200).json({
             success: true,
-            message: "user created successfully",
+            message: "User created successfully",
             data: result
         })
 
-    } catch (err: unknown) {
+    } catch (error: unknown) {
         res.status(400).json({
             success: false,
-            err: err
+            error: {
+                code: 400,
+                descrtiption: error.message
+            }
         })
     }
 }
