@@ -1,9 +1,11 @@
-import { addProductToOrderService, createUserService, deleteSingleUserService, getAllOrdersService, getAllUsersService, getSingleUserService, updateSingleUserService } from "./user.service";
+import { addProductToOrderService, createUserService, deleteSingleUserService, getAllOrdersService, getAllUsersService, getSingleUserService, totalPriceOfOrdersService, updateSingleUserService } from "./user.service";
 import { Request, Response } from "express";
+import { UserValidationSchema } from "./user.validation";
 export const createUser = async (req: Request, res: Response) => {
     try {
         const user = req.body;
-        const result = await createUserService(user);
+        const zodParsedData = UserValidationSchema.parse(user)
+        const result = await createUserService(zodParsedData);
         res.status(200).json({
             success: true,
             message: "User created successfully",
@@ -13,10 +15,7 @@ export const createUser = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(400).json({
             success: false,
-            error: {
-                code: 400,
-                descrtiption: error.message
-            }
+            error: error
         })
     }
 }
@@ -116,6 +115,23 @@ export const getAllOrders = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
         const result = await getAllOrdersService(userId);
+        res.status(200).json({
+            success: true,
+            message: "Order fetched successfully",
+            data: result
+        })
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: "User not found",
+            error: error
+        })
+    }
+}
+export const totalPriceOfOrders = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const result = await totalPriceOfOrdersService(userId);
         res.status(200).json({
             success: true,
             message: "Order fetched successfully",

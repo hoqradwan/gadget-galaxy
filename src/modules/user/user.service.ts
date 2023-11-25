@@ -31,3 +31,13 @@ export const getAllOrdersService = async (userId: string) => {
     const result = await User.find({ userId }).select({ orders: 1, _id: 0 });
     return result;
 }
+export const totalPriceOfOrdersService = async (userId: string, user: TUser) => {
+    const { user: userData } = await User.find({ userId });
+    const totalPrice = userData.orders.map((order: object) => {
+        let totalcost = 0
+        const total = order.price * order.quantity;
+        totalcost += total
+        return totalcost;
+    })
+    console.log(totalPrice)
+}
