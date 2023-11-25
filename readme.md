@@ -44,4 +44,4 @@ Welcome to Gadget Galaxy! This application provides a seamless experience for ma
 - **Method**: GET
 - **Endpoint**: [http://localhost:5000/api/users/:userId/orders/total-price](http://localhost:5000/api/users/:userId/orders/total-price)
 
-Explore these endpoints to manage users, orders, and products efficiently. If you have any questions or need assistance, refer to the documentation or contact our support team. Happy exploring! 🚀
+This documentation will help you to explore these endpoints to manage users, orders, and products efficiently. Happy exploring! 🚀
