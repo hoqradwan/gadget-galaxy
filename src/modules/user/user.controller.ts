@@ -65,12 +65,21 @@ export const getSingleUser = async (req: Request, res: Response) => {
 export const updateSingleUser = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        const updateAeUser = req.body;
-        const result = await updateSingleUserService(Number(userId), updateAeUser);
+        const toUpdateUser = req.body;
+        await updateSingleUserService(Number(userId), toUpdateUser);
         res.status(200).json({
             success: true,
             message: "User updated successfully",
-            data: result
+            data: {
+                userId: toUpdateUser.userId,
+                username: toUpdateUser.username,
+                fullName: toUpdateUser.fullName,
+                age: toUpdateUser.age,
+                email: toUpdateUser.email,
+                isActive: toUpdateUser.isActive,
+                hobbies: toUpdateUser.hobbies,
+                address: toUpdateUser.address,
+            }
         })
     } catch (error) {
         res.status(404).json({

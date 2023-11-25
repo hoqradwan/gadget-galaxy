@@ -97,4 +97,9 @@ UserSchema.statics.isUserExists = async function (userId: number) {
     const existingUser = await User.findOne({ userId })
     return existingUser;
 }
+UserSchema.methods.toJSON = function () {
+    const user = this.toObject();
+    delete user.password;
+    return user;
+};
 export const User = model<TUser, UserModel>("User", UserSchema);

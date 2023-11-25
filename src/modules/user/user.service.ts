@@ -6,12 +6,6 @@ export const createUserService = async (userData: TUser) => {
         throw new Error("User already exists")
     }
     const result = await User.create(userData);
-    // const user = new User(userData);
-    // if (await user(userData.userId)) {
-    //     throw new Error("User already exists");
-    // }
-    // const user = new User(userData);
-    // const result = await user.save();
     return result;
 }
 
@@ -44,7 +38,7 @@ export const addProductToOrderService = async (userId: number, updatedUserOrder:
     if (!(await User.isUserExists(userId))) {
         throw new Error("User does not exist")
     }
-    const result = await User.updateOne({ userId: userId }, { $set: updatedUserOrder })
+    const result = await User.updateOne({ userId: userId }, { $push: { orders: updatedUserOrder } })
     return result;
 }
 export const getAllOrdersService = async (userId: number) => {
