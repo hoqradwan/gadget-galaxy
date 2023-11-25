@@ -1,5 +1,7 @@
 import { Schema, model } from "mongoose";
-import { TUser, TFullName, TAddress, TOrder, UserModel, UserMethods } from "./user.interface";
+import { TUser, TFullName, TAddress, TOrder, UserModel } from "./user.interface";
+import bcrypt from "bcrypt";
+import config from "../../app/config";
 const FullNameSchema = new Schema<TFullName>({
     firstName: {
         type: String,
@@ -42,7 +44,7 @@ const OrderSchema = new Schema<TOrder>({
         required: true
     }
 })
-const UserSchema = new Schema<TUser, UserModel, UserMethods>({
+const UserSchema = new Schema<TUser, UserModel>({
     userId: {
         type: Number,
         required: [true, 'User id is required'],
@@ -81,6 +83,16 @@ const UserSchema = new Schema<TUser, UserModel, UserMethods>({
     }
 })
 
+UserSchema.pre('save', async function (next) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const user = this;
+    user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt_rounds))
+    next();
+})
+UserSchema.post('save', function (doc, next) {
+    doc.password = '';
+    next();
+})
 UserSchema.statics.isUserExists = async function (userId: number) {
     const existingUser = await User.findOne({ userId })
     return existingUser;

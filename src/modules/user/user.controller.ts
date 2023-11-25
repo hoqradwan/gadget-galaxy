@@ -15,7 +15,11 @@ export const createUser = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(400).json({
             success: false,
-            error: error.message
+            message: "User not found",
+            error: {
+                code: 404,
+                description: "User not found!"
+            }
         })
     }
 }
@@ -41,7 +45,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
 export const getSingleUser = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        const result = await getSingleUserService(userId);
+        const result = await getSingleUserService(Number(userId));
         res.status(200).json({
             success: true,
             message: "User fetched successfully",
@@ -62,7 +66,7 @@ export const updateSingleUser = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
         const updateAeUser = req.body;
-        const result = await updateSingleUserService(userId, updateAeUser);
+        const result = await updateSingleUserService(Number(userId), updateAeUser);
         res.status(200).json({
             success: true,
             message: "User updated successfully",
@@ -97,7 +101,7 @@ export const addProductToOrder = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
         const updatedUserOrder = req.body;
-        await addProductToOrderService(userId, updatedUserOrder);
+        await addProductToOrderService(Number(userId), updatedUserOrder);
         res.status(200).json({
             success: true,
             message: "Order created successfully",
@@ -114,7 +118,7 @@ export const addProductToOrder = async (req: Request, res: Response) => {
 export const getAllOrders = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        const result = await getAllOrdersService(userId);
+        const result = await getAllOrdersService(Number(userId));
         res.status(200).json({
             success: true,
             message: "Order fetched successfully",

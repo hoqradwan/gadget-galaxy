@@ -34,17 +34,23 @@ export const updateSingleUserService = async (userId: number, updatedUser: TUser
     return result;
 }
 export const deleteSingleUserService = async (userId: number) => {
-    if (await User.isUserExists(userId) === null) {
-        throw new Error("User does not exist")
+    if (!(await User.isUserExists(userId))) {
+        throw new Error("User already existsssss")
     }
     const result = await User.deleteOne({ userId: userId })
     return result;
 }
-export const addProductToOrderService = async (userId: string, updatedUserOrder: TUser) => {
+export const addProductToOrderService = async (userId: number, updatedUserOrder: TUser) => {
+    if (!(await User.isUserExists(userId))) {
+        throw new Error("User does not exist")
+    }
     const result = await User.updateOne({ userId: userId }, { $set: updatedUserOrder })
     return result;
 }
-export const getAllOrdersService = async (userId: string) => {
+export const getAllOrdersService = async (userId: number) => {
+    if (!(await User.isUserExists(userId))) {
+        throw new Error("User does not exist")
+    }
     const result = await User.find({ userId }).select({ orders: 1, _id: 0 });
     return result;
 }
