@@ -3,8 +3,8 @@ import { Request, Response } from "express";
 import { UserValidationSchema } from "./user.validation";
 export const createUser = async (req: Request, res: Response) => {
     try {
-        const user = req.body;
-        const zodParsedData = UserValidationSchema.parse(user)
+        const { user: userData } = req.body;
+        const zodParsedData = UserValidationSchema.parse(userData)
         const result = await createUserService(zodParsedData);
         res.status(200).json({
             success: true,
@@ -15,7 +15,7 @@ export const createUser = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(400).json({
             success: false,
-            error: error
+            error: error.message
         })
     }
 }
@@ -79,7 +79,7 @@ export const updateSingleUser = async (req: Request, res: Response) => {
 export const deleteSingleUser = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        await deleteSingleUserService(userId);
+        await deleteSingleUserService(Number(userId));
         res.status(200).json({
             success: true,
             message: "User deleted successfully",
@@ -131,17 +131,22 @@ export const getAllOrders = async (req: Request, res: Response) => {
 export const totalPriceOfOrders = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        const result = await totalPriceOfOrdersService(userId);
+        const result = await totalPriceOfOrdersService(Number(userId));
         res.status(200).json({
             success: true,
-            message: "Order fetched successfully",
-            data: result
+            message: "Total price calculated successfully!",
+            data: {
+                totalPrice: result
+            }
         })
     } catch (error) {
         res.status(404).json({
             success: false,
             message: "User not found",
-            error: error
+            error: {
+                code: 404,
+                description: "User not found!"
+            }
         })
     }
 }

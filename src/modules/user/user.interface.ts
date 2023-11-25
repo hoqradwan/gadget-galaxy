@@ -1,3 +1,5 @@
+import { Model } from "mongoose";
+
 export type TOrder = {
     productName: string;
     price: number;
@@ -23,6 +25,9 @@ export type TUser = {
     address: TAddress,
     orders?: TOrder[];
     isActive: boolean;
+}
+export interface UserModel extends Model<TUser> {
+    isUserExists(userId: number): Promise<TUser | null>
 }
 
 // userId (number): A unique identifier for the user.
