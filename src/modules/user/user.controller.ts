@@ -16,10 +16,7 @@ export const createUser = async (req: Request, res: Response) => {
         res.status(400).json({
             success: false,
             message: "User not found",
-            error: {
-                code: 404,
-                description: "User not found!"
-            }
+            error: error
         })
     }
 }
@@ -33,12 +30,9 @@ export const getAllUsers = async (req: Request, res: Response) => {
         })
 
     } catch (error) {
-        res.status(404).json({
+        res.status(400).json({
             success: false,
-            error: {
-                code: 404,
-                descrtiption: "User not found!"
-            }
+            error: error
         })
     }
 }
@@ -82,9 +76,9 @@ export const updateSingleUser = async (req: Request, res: Response) => {
             }
         })
     } catch (error) {
-        res.status(404).json({
+        res.status(400).json({
             success: false,
-            message: "User not found",
+            message: "Failed to update user",
             error: error
         })
     }
@@ -117,9 +111,9 @@ export const addProductToOrder = async (req: Request, res: Response) => {
             data: null
         })
     } catch (error) {
-        res.status(404).json({
+        res.status(400).json({
             success: false,
-            message: "User not found",
+            message: "Failed to add product to orders",
             error: error
         })
     }
@@ -134,9 +128,9 @@ export const getAllOrders = async (req: Request, res: Response) => {
             data: result
         })
     } catch (error) {
-        res.status(404).json({
+        res.status(400).json({
             success: false,
-            message: "User not found",
+            message: "Failed to get orders",
             error: error
         })
     }
@@ -153,13 +147,10 @@ export const totalPriceOfOrders = async (req: Request, res: Response) => {
             }
         })
     } catch (error) {
-        res.status(404).json({
+        res.status(400).json({
             success: false,
-            message: "User not found",
-            error: {
-                code: 404,
-                description: "User not found!"
-            }
+            message: "Failed to derive total price",
+            error: error
         })
     }
 }
