@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { addProductToOrderService, createUserService, deleteSingleUserService, getAllOrdersService, getAllUsersService, getSingleUserService, totalPriceOfOrdersService, updateSingleUserService } from "./user.service";
 import { Request, Response } from "express";
 import { UserValidationSchema } from "./user.validation";
@@ -58,7 +59,8 @@ export const updateSingleUser = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
         const toUpdateUser = req.body;
-        await updateSingleUserService(Number(userId), toUpdateUser);
+        const zodParsedData = UserValidationSchema.parse(toUpdateUser)
+        await updateSingleUserService(Number(userId), zodParsedData);
         res.status(200).json({
             success: true,
             message: "User updated successfully",
@@ -84,11 +86,11 @@ export const updateSingleUser = async (req: Request, res: Response) => {
 export const deleteSingleUser = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        const toDeleteUser = await deleteSingleUserService(Number(userId));
+        await deleteSingleUserService(Number(userId));
         res.status(200).json({
             success: true,
             message: "User deleted successfully",
-            data: toDeleteUser
+            data: null
         })
     } catch (error) {
         res.status(404).json({
@@ -106,13 +108,16 @@ export const addProductToOrder = async (req: Request, res: Response) => {
         res.status(200).json({
             success: true,
             message: "Order created successfully",
-            data: updatedUserOrder
+            data: null
         })
-    } catch (error) {
+    } catch (error: any) {
         res.status(400).json({
             success: false,
             message: "Failed to add product to orders",
-            error: error
+            error: {
+                "code": 404,
+                description: error.message
+            }
         })
     }
 }
@@ -125,11 +130,14 @@ export const getAllOrders = async (req: Request, res: Response) => {
             message: "Order fetched successfully",
             data: result
         })
-    } catch (error) {
+    } catch (error: any) {
         res.status(400).json({
             success: false,
             message: "Failed to get orders",
-            error: error
+            error: {
+                code: 400,
+                description: error
+            }
         })
     }
 }
