@@ -6,7 +6,10 @@ export const createUserService = async (userData: TUser) => {
         throw new Error("User already exists")
     }
     const result = await User.create(userData);
-    return result;
+    const userWithoutOrders = result.toObject();
+    delete userWithoutOrders?.password;
+    delete userWithoutOrders?.orders;
+    return userWithoutOrders;
 }
 
 export const getAllUsersService = async () => {
@@ -22,10 +25,19 @@ export const getSingleUserService = async (userId: number) => {
 }
 export const updateSingleUserService = async (userId: number, updatedUser: TUser) => {
     if (!(await User.isUserExists(userId))) {
-        throw new Error("User does not exsist")
+        throw new Error("User does not exist");
     }
-    const result = await User.updateOne({ userId: userId }, { $set: updatedUser })
-    return result;
+
+    const result = await User.findOneAndUpdate({ userId }, { $set: updatedUser }, { new: true });
+
+    if (!result) {
+        throw new Error("Failed to update user");
+    }
+    const userWithoutPassword = result.toObject();
+    delete userWithoutPassword?.password;
+    delete userWithoutPassword?.orders;
+
+    return userWithoutPassword;
 }
 export const deleteSingleUserService = async (userId: number) => {
     if (!(await User.isUserExists(userId))) {

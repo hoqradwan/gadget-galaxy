@@ -4,10 +4,9 @@ import { Request, Response } from "express";
 import { UserValidationSchema } from "./user.validation";
 export const createUser = async (req: Request, res: Response) => {
     try {
-        const { user: userData } = req.body;
+        const userData = req.body;
         const zodParsedData = UserValidationSchema.parse(userData)
         const result = await createUserService(zodParsedData);
-        // delete res.locals.result.orders;
         res.status(200).json({
             success: true,
             message: "User created successfully",
@@ -18,7 +17,10 @@ export const createUser = async (req: Request, res: Response) => {
         res.status(400).json({
             success: false,
             message: "User creation failed",
-            error: error
+            error: {
+                code : 400,
+                description : error
+            }
         })
     }
 }
@@ -34,7 +36,11 @@ export const getAllUsers = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(400).json({
             success: false,
-            error: error
+            message : "User not found",
+            error: {
+                code : 400,
+                description : error
+            }
         })
     }
 }
@@ -51,7 +57,10 @@ export const getSingleUser = async (req: Request, res: Response) => {
         res.status(404).json({
             success: false,
             message: "User not found",
-            error: error
+            error: {
+                code : 400,
+                description : error
+            }
         })
     }
 }
@@ -60,27 +69,21 @@ export const updateSingleUser = async (req: Request, res: Response) => {
         const { userId } = req.params;
         const toUpdateUser = req.body;
         const zodParsedData = UserValidationSchema.parse(toUpdateUser)
-        await updateSingleUserService(Number(userId), zodParsedData);
+        const result =  await updateSingleUserService(Number(userId), zodParsedData);
         res.status(200).json({
             success: true,
             message: "User updated successfully",
-            data: {
-                userId: toUpdateUser.userId,
-                username: toUpdateUser.username,
-                fullName: toUpdateUser.fullName,
-                age: toUpdateUser.age,
-                email: toUpdateUser.email,
-                isActive: toUpdateUser.isActive,
-                hobbies: toUpdateUser.hobbies,
-                address: toUpdateUser.address,
-            }
+            data: result
         })
     } catch (error) {
         res.status(400).json({
             success: false,
             message: "Failed to update user",
-            error: error
-        })
+            error: {
+                code : 400,
+                description : error
+            }
+     })
     }
 }
 export const deleteSingleUser = async (req: Request, res: Response) => {
@@ -96,7 +99,10 @@ export const deleteSingleUser = async (req: Request, res: Response) => {
         res.status(404).json({
             success: false,
             message: "User not found",
-            error: error
+            error: {
+                code : 400,
+                description : error
+            }
         })
     }
 }
@@ -116,7 +122,7 @@ export const addProductToOrder = async (req: Request, res: Response) => {
             message: "Failed to add product to orders",
             error: {
                 "code": 404,
-                description: error.message
+                description: error
             }
         })
     }
@@ -156,7 +162,10 @@ export const totalPriceOfOrders = async (req: Request, res: Response) => {
         res.status(400).json({
             success: false,
             message: "Failed to derive total price",
-            error: error
+            error: {
+                code : 400,
+                description : error
+            }
         })
     }
 }

@@ -91,9 +91,10 @@ UserSchema.pre('save', async function (next) {
 })
 UserSchema.post('save', function (doc, next) {
     doc.password = '';
-    delete this.orders;
+    // doc.orders = '';
     next();
 })
+
 UserSchema.statics.isUserExists = async function (userId: number) {
     const existingUser = await User.findOne({ userId })
     return existingUser;
