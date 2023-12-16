@@ -6,6 +6,7 @@ export const createUser = async (req: Request, res: Response) => {
         const { user: userData } = req.body;
         const zodParsedData = UserValidationSchema.parse(userData)
         const result = await createUserService(zodParsedData);
+        // delete res.locals.result.orders;
         res.status(200).json({
             success: true,
             message: "User created successfully",
@@ -15,7 +16,7 @@ export const createUser = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(400).json({
             success: false,
-            message: "User not found",
+            message: "User creation failed",
             error: error
         })
     }
@@ -25,7 +26,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
         const result = await getAllUsersService();
         res.status(200).json({
             success: true,
-            message: "User fetched successfully",
+            message: "Users retrieved successfully",
             data: result
         })
 
@@ -49,10 +50,7 @@ export const getSingleUser = async (req: Request, res: Response) => {
         res.status(404).json({
             success: false,
             message: "User not found",
-            error: {
-                code: 404,
-                description: "User not found!"
-            }
+            error: error
         })
     }
 }
@@ -86,11 +84,11 @@ export const updateSingleUser = async (req: Request, res: Response) => {
 export const deleteSingleUser = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        await deleteSingleUserService(Number(userId));
+        const toDeleteUser = await deleteSingleUserService(Number(userId));
         res.status(200).json({
             success: true,
             message: "User deleted successfully",
-            data: null
+            data: toDeleteUser
         })
     } catch (error) {
         res.status(404).json({
@@ -108,7 +106,7 @@ export const addProductToOrder = async (req: Request, res: Response) => {
         res.status(200).json({
             success: true,
             message: "Order created successfully",
-            data: null
+            data: updatedUserOrder
         })
     } catch (error) {
         res.status(400).json({

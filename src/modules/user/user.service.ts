@@ -10,14 +10,14 @@ export const createUserService = async (userData: TUser) => {
 }
 
 export const getAllUsersService = async () => {
-    const result = await User.find();
+    const result = await User.find({}, "-orders");
     return result;
 }
 export const getSingleUserService = async (userId: number) => {
     if (!(await User.isUserExists(userId))) {
         throw new Error("User does not exsist")
     }
-    const result = await User.find({ userId })
+    const result = await User.find({ userId }).select("-orders");
     return result;
 }
 export const updateSingleUserService = async (userId: number, updatedUser: TUser) => {

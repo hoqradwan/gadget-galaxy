@@ -91,6 +91,7 @@ UserSchema.pre('save', async function (next) {
 })
 UserSchema.post('save', function (doc, next) {
     doc.password = '';
+    delete this.orders;
     next();
 })
 UserSchema.statics.isUserExists = async function (userId: number) {
